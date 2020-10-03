@@ -2,6 +2,8 @@
 import { Guild } from 'discord.js';
 import mongoose from 'mongoose';
 
+mongoose.set('useFindAndModify', false);
+
 const GuildModel = mongoose.model('Guild');
 
 export default {
@@ -40,6 +42,25 @@ export default {
 		} catch (err) {
 			console.log(
 				`GUILD CONTROLLER REGISTER [${new Date().toLocaleString()}]:`,
+				err,
+			);
+			return undefined;
+		}
+	},
+	async update(guild: GuildType): Promise<mongoose.Document | undefined> {
+		try {
+			const response = await GuildModel.findByIdAndUpdate(guild._id, guild, {
+				new: true,
+			});
+
+			if (response) {
+				return response;
+			}
+
+			return undefined;
+		} catch (err) {
+			console.log(
+				`GUILD CONTROLLER UPDATE [${new Date().toLocaleString()}]:`,
 				err,
 			);
 			return undefined;

@@ -1,4 +1,4 @@
-import guildController from '../../controllers/GruildController';
+import guildController from '../../controllers/GuildController';
 
 export default (client: ClientType): void => {
 	const { user } = client;

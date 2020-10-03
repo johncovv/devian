@@ -1,5 +1,11 @@
 /* eslint-disable no-use-before-define */
-import { Client, Collection, Message } from 'discord.js';
+import {
+	Client,
+	Collection,
+	Message,
+	PermissionString,
+	BitFieldResolvable,
+} from 'discord.js';
 
 declare global {
 	namespace NodeJS {
@@ -16,6 +22,7 @@ declare global {
 			tag: string;
 			alias?: [string];
 			description: string;
+			permissions?: BitFieldResolvable<PermissionString>[];
 		};
 		run: (
 			client: ClientType,
@@ -31,7 +38,7 @@ declare global {
 		icon: string;
 		config: {
 			prefix: string;
-			language: 'pt-br' | 'en-use';
+			language: 'pt-br' | 'en-us';
 		};
 	}
 

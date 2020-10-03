@@ -1,5 +1,5 @@
 import { Guild, MessageEmbed } from 'discord.js';
-import guildController from '../../controllers/GruildController';
+import guildController from '../../controllers/GuildController';
 
 export default async (client: ClientType, guild: Guild): Promise<void> => {
 	const exist = await guildController.find(guild.id);

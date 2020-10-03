@@ -4,7 +4,8 @@ export default {
 	config: {
 		tag: 'clean',
 		description:
-			'Clears X (1 to 100) number of messages from the current channel!',
+			'Clears X (1 to 100) number of messages from the current channel!\nThe command cannot delete very old messages!',
+		permissions: ['MANAGE_MESSAGES'],
 	},
 	run: async (client, message, args): Promise<void> => {
 		const embed = new MessageEmbed();
@@ -49,7 +50,8 @@ export default {
 				limit: amountFormated,
 			});
 
-			message.channel.bulkDelete(messagesChannel);
+			// delete messages and skip the 14 day filter
+			message.channel.bulkDelete(messagesChannel, true);
 
 			const response = await message.channel.send(
 				embed.setDescription(
