@@ -18,5 +18,5 @@ export default (client: ClientType, message: Message): void => {
 
 	const commandFile = client.commands.get(command);
 
-	if (commandFile) commandFile.default.run(client, message, args);
+	if (commandFile) commandFile.info.command.run(client, message, args);
 };

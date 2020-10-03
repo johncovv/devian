@@ -25,7 +25,7 @@ declare global {
 
 	interface CollectionType {
 		key: string;
-		command: CommandType;
+		info: { command: CommandType; dir: string };
 	}
 
 	interface ClientType extends Client {
