@@ -10,4 +10,10 @@ export default (client: ClientType): void => {
 
 		readyEvent.default(client);
 	});
+
+	client.on('guildCreate', async (guild) => {
+		const guildCreatedEvent = await import('../events/client/guildCreated');
+
+		guildCreatedEvent.default(client, guild);
+	});
 };

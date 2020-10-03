@@ -7,6 +7,7 @@ declare global {
 			DISCORD_TOKEN: string;
 			NODE_ENV: string;
 			DISCORD_PREFIX: string;
+			MONGO_URL: string;
 		}
 	}
 

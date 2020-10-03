@@ -8,8 +8,8 @@ export default {
 	},
 	run: async (client, message, args): Promise<void> => {
 		const { prefix } = env;
-		const embed = new MessageEmbed();
 		const type = args?.join().trim();
+		const embed = new MessageEmbed();
 
 		const group = [] as { dir: string; tag: string; description: string }[];
 		const clientCommands = client.commands as CollectionType[];

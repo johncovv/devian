@@ -1,3 +1,5 @@
+import guildController from '../../controllers/GruildController';
+
 export default (client: ClientType): void => {
 	const { user } = client;
 
@@ -11,6 +13,16 @@ export default (client: ClientType): void => {
 			},
 		});
 	}
+
+	const guildsCacheArray = client.guilds.cache;
+
+	guildsCacheArray.forEach(async (guild) => {
+		const exist = await guildController.find(guild.id);
+
+		if (!exist) {
+			guildController.register(guild);
+		}
+	});
 
 	// eslint-disable-next-line no-console
 	console.log(`✔ Logged in as ${client.user?.tag}!`);

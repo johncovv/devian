@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-globals */
-import embed from '../../utils/embed';
+import { MessageEmbed } from 'discord.js';
 
 export default {
 	config: {
@@ -8,6 +7,7 @@ export default {
 			'Clears X (1 to 100) number of messages from the current channel!',
 	},
 	run: async (client, message, args): Promise<void> => {
+		const embed = new MessageEmbed();
 		if (message.channel.type === 'dm') return;
 
 		const amount = args?.join();
@@ -15,6 +15,7 @@ export default {
 		if (amount) {
 			const amountFormated = parseInt(amount, 10);
 
+			// eslint-disable-next-line no-restricted-globals
 			if (isNaN(amountFormated)) {
 				message.reply(embed.setDescription('This is not a valid number!'));
 				return;

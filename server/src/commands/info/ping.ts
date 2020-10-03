@@ -1,4 +1,4 @@
-import embed from '../../utils/embed';
+import { MessageEmbed } from 'discord.js';
 
 export default {
 	config: {
@@ -6,6 +6,8 @@ export default {
 		description: 'Responds with bot latency!',
 	},
 	run: async (client, message): Promise<void> => {
+		const embed = new MessageEmbed();
+
 		const msgInstance = await message.channel.send(
 			embed.setDescription('Pinging...'),
 		);
