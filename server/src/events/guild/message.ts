@@ -6,7 +6,15 @@ export default (client: ClientType, message: Message): void => {
 	if (message.author.bot) return;
 	if (!message.guild) return;
 
-	const { prefix } = env;
+	const { id } = message.guild;
+
+	const guildsArray = client.guildsCollection as GuildType[];
+
+	const exist = guildsArray.find(
+		(guild) => guild.guildId === parseInt(id, 10),
+	) as GuildType;
+
+	const prefix = exist.config.prefix || env.prefix;
 
 	if (!message.content.startsWith(prefix)) return;
 

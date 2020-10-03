@@ -17,6 +17,7 @@ requireDir(path.join(__dirname, 'src', 'models'));
 const client = new Client({ disableMentions: 'all' }) as ClientType;
 
 client.commands = new Collection();
+client.guildsCollection = new Collection();
 
 eventsHandler(client);
 commandsHandler(client);

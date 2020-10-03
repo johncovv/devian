@@ -24,13 +24,30 @@ declare global {
 		) => Promise<void> | void;
 	}
 
+	interface GuildType {
+		_id: string;
+		guildId: id;
+		name: string;
+		icon: string;
+		config: {
+			prefix: string;
+			language: 'pt-br' | 'en-use';
+		};
+	}
+
 	interface CollectionType {
 		key: string;
 		info: { command: CommandType; dir: string };
 	}
 
+	interface GuildsCollection {
+		id: number;
+		guild: GuildType;
+	}
+
 	interface ClientType extends Client {
 		commands: Collection<CollectionType>;
+		guildsCollection: Collection<GuildsCollection>;
 	}
 }
 

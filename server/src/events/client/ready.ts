@@ -20,7 +20,13 @@ export default (client: ClientType): void => {
 		const exist = await guildController.find(guild.id);
 
 		if (!exist) {
-			guildController.register(guild);
+			const registered = await guildController.register(guild);
+
+			if (registered) {
+				client.guildsCollection.set(registered._id, registered);
+			}
+		} else {
+			client.guildsCollection.set(exist._id, exist);
 		}
 	});
 
