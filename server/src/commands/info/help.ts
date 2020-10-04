@@ -6,8 +6,6 @@ import {
 	GuildMember,
 } from 'discord.js';
 
-import env from '../../../config/enviroment';
-
 interface HelpGroupType {
 	dir: string;
 	tag: string;
@@ -41,9 +39,20 @@ export default {
 		permissions: ['SEND_MESSAGES'],
 	},
 	run: async (client, message, args): Promise<void> => {
-		const { prefix } = env;
+		if (!message.guild) return;
+
 		const type = args?.join().trim();
 		const embed = new MessageEmbed();
+
+		// get guild from collection
+		const { guild } = message;
+		const guildsArray = client.guildsCollection as GuildType[];
+		const guildExist = guildsArray.find(
+			(x) => x.guildId === parseInt(guild.id, 10),
+		) as GuildType;
+
+		// set prefix
+		const { prefix } = guildExist.config;
 
 		const group = [] as HelpGroupType[];
 		const clientCommands = client.commands as CollectionType[];
@@ -113,13 +122,13 @@ export default {
 				});
 
 				availableGroups.forEach((x) => {
-					embedDescription += `!help ${x}\n`;
+					embedDescription += `${prefix}help ${x}\n`;
 				});
 
 				embed.setDescription(embedDescription);
 			}
 		}
 
-		message.channel.send(embed);
+		message.author.send(embed);
 	},
 } as CommandType;

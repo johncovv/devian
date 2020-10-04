@@ -28,6 +28,8 @@ export default (client: ClientType, message: Message): void => {
 	// if the user has sent a command, searches in the collection
 	const commandFile = client.commands.get(command);
 
+	if (!commandFile) return;
+
 	// checks if the user has the permissions required by the command
 	const permissions = commandFile.info.command.config
 		.permissions as BitFieldResolvable<PermissionString>[];

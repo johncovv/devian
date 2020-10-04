@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+import colors from 'colors';
+
 import guildController from '../../controllers/GuildController';
 
 export default (client: ClientType): void => {
@@ -30,6 +33,13 @@ export default (client: ClientType): void => {
 		}
 	});
 
-	// eslint-disable-next-line no-console
-	console.log(`✔ Logged in as ${client.user?.tag}!`);
+	console.log(colors.bgGreen.black(`\nLogged in as ${client.user?.tag}!\n`));
+
+	const allCommands = client.commands as CollectionType[];
+
+	allCommands.forEach((command) => {
+		console.log(
+			`Command ${colors.green(command.info.command.config.tag)} registered ✅`,
+		);
+	});
 };

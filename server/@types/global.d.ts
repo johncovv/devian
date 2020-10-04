@@ -14,6 +14,7 @@ declare global {
 			NODE_ENV: string;
 			DISCORD_PREFIX: string;
 			MONGO_URL: string;
+			ANIME_BASE_URL: string;
 		}
 	}
 
