@@ -22,15 +22,6 @@ export default {
 				return;
 			}
 
-			if (amountFormated === undefined) {
-				message.reply(
-					embed.setDescription(
-						"❓ Yout haven't given an amount of messages wich should be deleted!",
-					),
-				);
-				return;
-			}
-
 			if (amountFormated > 100) {
 				message.reply(
 					embed.setDescription(
@@ -60,6 +51,12 @@ export default {
 			);
 
 			response.delete({ timeout: 2000 });
+		} else {
+			message.reply(
+				embed.setDescription(
+					"❓ Yout haven't given an amount of messages wich should be deleted!",
+				),
+			);
 		}
 	},
 } as CommandType;

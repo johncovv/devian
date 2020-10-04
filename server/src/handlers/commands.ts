@@ -14,5 +14,5 @@ export default async (client: ClientType): Promise<void> => {
 			});
 		});
 	};
-	['info', 'moderation'].forEach((x) => load(x));
+	['info', 'moderation', 'administration'].forEach((x) => load(x));
 };

@@ -1,17 +1,51 @@
-import { MessageEmbed } from 'discord.js';
+/* eslint-disable no-restricted-syntax */
+import {
+	BitFieldResolvable,
+	MessageEmbed,
+	PermissionString,
+	GuildMember,
+} from 'discord.js';
+
 import env from '../../../config/enviroment';
+
+interface HelpGroupType {
+	dir: string;
+	tag: string;
+	description: string;
+	permissions?: BitFieldResolvable<PermissionString>[];
+}
+
+const verifyPermission = (
+	command: HelpGroupType,
+	member: GuildMember | null,
+): boolean => {
+	const permissions = command.permissions as BitFieldResolvable<
+		PermissionString
+	>[];
+
+	if (permissions) {
+		for (const perm of permissions) {
+			if (member?.hasPermission(perm)) {
+				return true;
+			}
+			return false;
+		}
+	}
+	return true;
+};
 
 export default {
 	config: {
 		tag: 'help',
 		description: 'Return all my commands',
+		permissions: ['SEND_MESSAGES'],
 	},
 	run: async (client, message, args): Promise<void> => {
 		const { prefix } = env;
 		const type = args?.join().trim();
 		const embed = new MessageEmbed();
 
-		const group = [] as { dir: string; tag: string; description: string }[];
+		const group = [] as HelpGroupType[];
 		const clientCommands = client.commands as CollectionType[];
 
 		clientCommands.forEach((cmd) => {
@@ -19,6 +53,7 @@ export default {
 				dir: cmd.info.dir,
 				tag: cmd.info.command.config.tag,
 				description: cmd.info.command.config.description,
+				permissions: cmd.info.command.config.permissions,
 			});
 		});
 
@@ -27,8 +62,12 @@ export default {
 			let embedDescription = '';
 
 			group.forEach((item) => {
-				if (!formatedEmbed.find((x) => x === item.dir)) {
-					formatedEmbed.push(item.dir);
+				const haveAllPermissions = verifyPermission(item, message.member);
+
+				if (haveAllPermissions) {
+					if (!formatedEmbed.find((x) => x === item.dir)) {
+						formatedEmbed.push(item.dir);
+					}
 				}
 			});
 
@@ -44,17 +83,32 @@ export default {
 
 			if (exist.length > 0) {
 				exist.forEach((item) => {
-					embed.addField(`${prefix}${item.tag}`, item.description || '\u200b');
+					const haveAllPermissions = verifyPermission(item, message.member);
+
+					if (haveAllPermissions) {
+						embed.addField(
+							`${prefix}${item.tag}`,
+							item.description || '\u200b',
+						);
+						embed.setTitle(`Available commands for ${type?.toUpperCase()}`);
+					} else {
+						embed.setDescription(
+							`⛔ You do not have the correct permissions to use this command!`,
+						);
+					}
 				});
-				embed.setTitle(`Available commands for ${type?.toUpperCase()}`);
 			} else {
 				const availableGroups = [] as string[];
 				let embedDescription =
 					'⁉ This command group does not exist!\n\n**Available groups:**\n';
 
 				group.forEach((item) => {
-					if (!availableGroups.find((x) => x === item.dir)) {
-						availableGroups.push(item.dir);
+					const haveAllPermissions = verifyPermission(item, message.member);
+
+					if (haveAllPermissions) {
+						if (!availableGroups.find((x) => x === item.dir)) {
+							availableGroups.push(item.dir);
+						}
 					}
 				});
 

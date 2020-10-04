@@ -4,6 +4,7 @@ export default {
 	config: {
 		tag: 'ping',
 		description: 'Responds with bot latency!',
+		permissions: ['SEND_MESSAGES'],
 	},
 	run: async (client, message): Promise<void> => {
 		const embed = new MessageEmbed();

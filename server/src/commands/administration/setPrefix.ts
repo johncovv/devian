@@ -5,6 +5,7 @@ export default {
 	config: {
 		tag: 'devian-set-prefix',
 		description: 'Set prefix from Devian bot!',
+		permissions: ['ADMINISTRATOR'],
 	},
 	run: async (client, message, args): Promise<void> => {
 		const arg = args?.join().trim();
