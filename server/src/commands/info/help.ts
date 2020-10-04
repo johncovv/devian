@@ -6,18 +6,13 @@ import {
 	GuildMember,
 } from 'discord.js';
 
-interface HelpGroupType {
-	dir: string;
-	tag: string;
-	description: string;
-	permissions?: BitFieldResolvable<PermissionString>[];
-}
+import getGuildPrefix from '../../utils/getGuildPrefix';
 
 const verifyPermission = (
-	command: HelpGroupType,
+	command: CommandType,
 	member: GuildMember | null,
 ): boolean => {
-	const permissions = command.permissions as BitFieldResolvable<
+	const permissions = command.config.permissions as BitFieldResolvable<
 		PermissionString
 	>[];
 
@@ -41,94 +36,97 @@ export default {
 	run: async (client, message, args): Promise<void> => {
 		if (!message.guild) return;
 
-		const type = args?.join().trim();
-		const embed = new MessageEmbed();
+		const { member } = message;
 
-		// get guild from collection
-		const { guild } = message;
-		const guildsArray = client.guildsCollection as GuildType[];
-		const guildExist = guildsArray.find(
-			(x) => x.guildId === parseInt(guild.id, 10),
-		) as GuildType;
+		const arg = args?.join().trim().toLowerCase();
 
-		// set prefix
-		const { prefix } = guildExist.config;
+		const prefix = getGuildPrefix(client, message);
 
-		const group = [] as HelpGroupType[];
-		const clientCommands = client.commands as CollectionType[];
+		const allCommands = client.commands as CollectionType[];
 
-		clientCommands.forEach((cmd) => {
-			group.push({
-				dir: cmd.info.dir,
-				tag: cmd.info.command.config.tag,
-				description: cmd.info.command.config.description,
-				permissions: cmd.info.command.config.permissions,
-			});
-		});
+		if (!arg) {
+			const groupOfCommands = [] as string[];
 
-		if (type?.length === 0) {
-			const formatedEmbed = [] as string[];
-			let embedDescription = '';
-
-			group.forEach((item) => {
-				const haveAllPermissions = verifyPermission(item, message.member);
-
-				if (haveAllPermissions) {
-					if (!formatedEmbed.find((x) => x === item.dir)) {
-						formatedEmbed.push(item.dir);
-					}
+			allCommands.forEach((cmd) => {
+				if (!groupOfCommands.find((x) => x === cmd.info.dir)) {
+					groupOfCommands.push(cmd.info.dir);
 				}
 			});
 
-			formatedEmbed.forEach((x) => {
-				embedDescription += `${prefix}help ${x}\n`;
-			});
+			const commandsCollection = [] as {
+				group: string;
+				commands: CommandType[];
+			}[];
 
-			embed
-				.setTitle('Available command types')
-				.setDescription(embedDescription);
-		} else {
-			const exist = group.filter((item) => item.dir === type);
-
-			if (exist.length > 0) {
-				exist.forEach((item) => {
-					const haveAllPermissions = verifyPermission(item, message.member);
-
-					if (haveAllPermissions) {
-						embed.addField(
-							`${prefix}${item.tag}`,
-							item.description || '\u200b',
-						);
-						embed.setTitle(`Available commands for ${type?.toUpperCase()}`);
-					} else {
-						embed.setDescription(
-							`⛔ You do not have the correct permissions to use this command!`,
-						);
-					}
-				});
-			} else {
-				const availableGroups = [] as string[];
-				let embedDescription =
-					'⁉ This command group does not exist!\n\n**Available groups:**\n';
-
-				group.forEach((item) => {
-					const haveAllPermissions = verifyPermission(item, message.member);
-
-					if (haveAllPermissions) {
-						if (!availableGroups.find((x) => x === item.dir)) {
-							availableGroups.push(item.dir);
+			groupOfCommands.forEach((group) => {
+				const localCommands = [] as CommandType[];
+				allCommands.forEach((cmd) => {
+					const hasPermission = verifyPermission(cmd.info.command, member);
+					if (cmd.info.dir === group) {
+						if (hasPermission) {
+							localCommands.push(cmd.info.command);
 						}
 					}
 				});
 
-				availableGroups.forEach((x) => {
-					embedDescription += `${prefix}help ${x}\n`;
+				if (localCommands.length > 0) {
+					commandsCollection.push({ group, commands: localCommands });
+				}
+			});
+
+			const embed = new MessageEmbed().setColor('#ffab00');
+
+			commandsCollection.forEach((groupCollection) => {
+				let fieldValue = '';
+
+				groupCollection.commands.forEach((cmd, index) => {
+					const position = index + 1;
+					fieldValue += `\`${prefix}${cmd.config.tag}\`${
+						position === groupCollection.commands.length ? '.' : ','
+					} `;
 				});
 
-				embed.setDescription(embedDescription);
-			}
-		}
+				embed.addField(groupCollection.group, fieldValue);
+			});
 
-		message.author.send(embed);
+			embed.setDescription(
+				`**${message.guild.name.toUpperCase()}** commands that you have access to!`,
+			);
+
+			message.author.send(embed);
+			message.reply(
+				`I sent in your private the commands that you have access on this server!`,
+			);
+		} else {
+			const exist = allCommands.find(
+				(cmd) => cmd.info.command.config.tag === arg,
+			);
+
+			const commandEmbed = new MessageEmbed();
+
+			if (exist && arg !== 'help') {
+				const hasPermission = verifyPermission(exist.info.command, member);
+
+				if (hasPermission) {
+					const { tag, description } = exist.info.command.config;
+
+					commandEmbed.addField(prefix + tag, description);
+
+					message.author.send(commandEmbed);
+					message.reply('I sent the command description in your private!');
+					return;
+				}
+				message.channel.send(
+					commandEmbed.setDescription(
+						'You do not have the necessary permissions to use this command!',
+					),
+				);
+				return;
+			}
+
+			message.channel.send(
+				commandEmbed.setDescription('This command does not exist!'),
+			);
+		}
 	},
 } as CommandType;

@@ -1,7 +1,8 @@
-import { MessageEmbed } from 'discord.js';
+import { CollectorFilter, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import env from '../../../config/enviroment';
+import getGuildPrefix from '../../utils/getGuildPrefix';
 
 interface AnimeTypeResponse {
 	Id: number;
@@ -26,28 +27,23 @@ export default {
 
 		const arg = args?.join(' ').trim();
 
-		const requestErrorMessage = `
-		Houve um erro na busca, tente novamente mais tarde.\nCaso o erro persista entre em contato com o desenvolvedor:\n\nDiscord: [${admin.tag}](https://discordapp.com/users/${admin.id})\nTwitter: [@johncovv](https://twitter.com/johncovv)`;
+		const prefix = getGuildPrefix(client, message);
 
-		const embed = new MessageEmbed();
+		const requestErrorMessage = new MessageEmbed().setDescription(`
+		Houve um erro na busca, tente novamente mais tarde.\nCaso o erro persista entre em contato com o desenvolvedor:\n\nDiscord: [${admin.tag}](https://discordapp.com/users/${admin.id})\nTwitter: [@johncovv](https://twitter.com/johncovv)`);
 
 		// if the parameter is less than 2 characters
 		if (arg && arg?.length < 2) {
 			message.channel.send(
-				embed.setDescription(
+				new MessageEmbed().setDescription(
 					`🚧 Para fazer a pesquisa é necessário no mínimo 2 caracteres`,
 				),
 			);
 			return;
 		}
 
-		embed.setFooter(
-			`Desenvolvido por ${admin.username}`,
-			`https://cdn.discordapp.com/avatars/${admin.id}/${admin.avatar}.png`,
-		);
-
 		// if the user has not passed any parameter it returns the last 20 animes
-		if (!arg) {
+		if (!arg || arg.length === 0) {
 			try {
 				const getRecentsAnimes = await fetch(
 					`${env.animeBaseUrl}/api/animes/recentes`,
@@ -55,23 +51,27 @@ export default {
 
 				const jsonData = (await getRecentsAnimes.json()) as AnimeTypeResponse[];
 
-				let recentesEmbedDescription = '';
+				let recentsAnimesEmbedDescription = '';
 
 				jsonData.forEach((anime, index) => {
 					const position = index + 1;
 
 					if (position <= 20) {
-						recentesEmbedDescription += `[${anime.Nome}](http://animes.johncovv.com/anime/${anime.Id})\n`;
+						recentsAnimesEmbedDescription += `[${anime.Nome}](http://animes.johncovv.com/anime/${anime.Id})\n`;
 					}
 				});
 
-				embed
-					.setDescription(recentesEmbedDescription)
-					.setTitle('Lista dos 20 animes mais recentes');
-			} catch (err) {
-				embed.setDescription(requestErrorMessage);
-			}
+				const recentsEmbed = new MessageEmbed();
 
+				recentsEmbed
+					.setDescription(recentsAnimesEmbedDescription)
+					.setTitle('Lista dos 20 animes mais recentes');
+
+				message.channel.send(recentsEmbed);
+				return;
+			} catch (err) {
+				message.channel.send(requestErrorMessage);
+			}
 			// if the user has passed parameters with more than 2 characters, search the api
 		} else {
 			try {
@@ -85,29 +85,118 @@ export default {
 
 				if (jsonData.value.length === 0) {
 					message.channel.send(
-						embed.setDescription(
+						new MessageEmbed().setDescription(
 							`⁉ Nenhum anime encontrado com o título **${arg}**!`,
 						),
 					);
 					return;
 				}
 
-				let searchRequestDescription = `Resultados de busca para **${arg}**\n\n`;
+				let searchRequestDescription = `${jsonData.value.length}  Resultados para **${arg}**.\nEnvie o número do anime para mais detalhes.\n\n`;
 
 				jsonData.value.forEach((anime, index) => {
 					const position = index + 1;
 
 					if (position <= 20) {
-						searchRequestDescription += `[${anime.Nome}](http://animes.johncovv.com/anime/${anime.Id})\n`;
+						searchRequestDescription += `[${position}] - [${anime.Nome}](http://animes.johncovv.com/anime/${anime.Id})\n`;
 					}
 				});
 
-				embed.setDescription(searchRequestDescription);
+				const animesSearchResultsEmbed = new MessageEmbed();
+
+				animesSearchResultsEmbed
+					.setDescription(searchRequestDescription)
+					.setFooter(
+						'Envie a resposta em até 10 segundos, ou envie "cancelar"!',
+					);
+
+				message.channel.send(animesSearchResultsEmbed);
+
+				const filter: CollectorFilter = (m) =>
+					m.author.id === message.author.id;
+
+				try {
+					const getUserResponse = await message.channel.awaitMessages(filter, {
+						max: 1,
+						time: 10000,
+						errors: ['time'],
+					});
+
+					const userResponse = getUserResponse.first();
+
+					const userResponseContent = userResponse?.content;
+
+					if (userResponseContent) {
+						if (userResponseContent === 'cancelar') {
+							message.channel.send(
+								new MessageEmbed().setDescription('✅ Comando cancelado!'),
+							);
+							return;
+						}
+
+						if (userResponseContent.startsWith(prefix)) {
+							return;
+						}
+
+						const parsed = parseInt(userResponseContent, 10);
+
+						if (isNaN(parsed) || parsed < 1 || parsed > jsonData.value.length) {
+							message.channel.send(
+								new MessageEmbed().setDescription('⛔ Opção inválida!'),
+							);
+							return;
+						}
+
+						try {
+							const getRequestedAnime = await fetch(
+								`${env.animeBaseUrl}/odata/Animesdb?$filter=Id eq ${
+									jsonData.value[parsed - 1].Id
+								}`,
+							);
+
+							const parsedToJson = (await getRequestedAnime.json()) as {
+								value: AnimeTypeResponse[];
+							};
+
+							const animeResponseData = parsedToJson.value[0];
+
+							const animeDescriptionEmbed = new MessageEmbed();
+
+							animeDescriptionEmbed
+								.setImage(animeResponseData.Imagem)
+								.setDescription(
+									`**[${animeResponseData.Nome}](http://animes.johncovv.com/anime/${animeResponseData.Id})**`,
+								)
+								.addField('Lançamento', `${animeResponseData.Ano}`, true)
+								.addField(
+									'Status',
+									`${animeResponseData.Status ? `Ativo` : `Completo`}`,
+									true,
+								)
+								.addField(
+									'Categorias:',
+									`${animeResponseData.Categoria}`,
+									false,
+								)
+								.addField('Sinopse:', `${animeResponseData.Desc}\n\n\n`, false);
+
+							message.channel.send(animeDescriptionEmbed);
+						} catch (err) {
+							message.channel.send(requestErrorMessage);
+							return;
+						}
+					}
+				} catch (err) {
+					message.channel.send(
+						new MessageEmbed().setDescription(
+							'⁉ Não foi enviada nenhuma resposta entre os 10 segundos, comando cancelado!',
+						),
+					);
+					return;
+				}
 			} catch (err) {
-				embed.setDescription(requestErrorMessage);
+				message.channel.send(requestErrorMessage);
 			}
 		}
-
-		message.channel.send(embed);
 	},
 } as CommandType;
