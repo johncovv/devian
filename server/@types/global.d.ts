@@ -15,6 +15,7 @@ declare global {
 			DISCORD_PREFIX: string;
 			MONGO_URL: string;
 			ANIME_BASE_URL: string;
+			YOUTUBE_KEY: string;
 		}
 	}
 
@@ -29,7 +30,8 @@ declare global {
 			client: ClientType,
 			message: Message,
 			args?: [string],
-		) => Promise<void> | void;
+			prefix: string,
+		) => Promise<Message> | Promise<void> | void;
 	}
 
 	interface GuildType {

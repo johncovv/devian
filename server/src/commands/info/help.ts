@@ -6,8 +6,6 @@ import {
 	GuildMember,
 } from 'discord.js';
 
-import getGuildPrefix from '../../utils/getGuildPrefix';
-
 const verifyPermission = (
 	command: CommandType,
 	member: GuildMember | null,
@@ -33,14 +31,12 @@ export default {
 		description: 'Return all my commands',
 		permissions: ['SEND_MESSAGES'],
 	},
-	run: async (client, message, args): Promise<void> => {
+	run: async (client, message, args, prefix): Promise<void> => {
 		if (!message.guild) return;
 
 		const { member } = message;
 
 		const arg = args?.join().trim().toLowerCase();
-
-		const prefix = getGuildPrefix(client, message);
 
 		const allCommands = client.commands as CollectionType[];
 

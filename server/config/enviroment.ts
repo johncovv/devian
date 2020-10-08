@@ -8,4 +8,5 @@ export default {
 	prefix: process.env.DISCORD_PREFIX || '.',
 	mongoUrl: process.env.MONGO_URL || '',
 	animeBaseUrl: process.env.ANIME_BASE_URL || '',
+	youtubeKey: process.env.YOUTUBE_KEY || '',
 };

@@ -2,7 +2,6 @@ import { CollectorFilter, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import env from '../../../config/enviroment';
-import getGuildPrefix from '../../utils/getGuildPrefix';
 
 interface AnimeTypeResponse {
 	Id: number;
@@ -22,12 +21,10 @@ export default {
 			'Search anime on [animes.johncovv.com](http://animes.johncovv.com) (only PT-BR)!',
 		permissions: ['SEND_MESSAGES'],
 	},
-	run: async (client, message, args): Promise<void> => {
+	run: async (client, message, args, prefix): Promise<void> => {
 		const admin = await client.users.fetch('426609168217276417');
 
 		const arg = args?.join(' ').trim();
-
-		const prefix = getGuildPrefix(client, message);
 
 		const requestErrorMessage = new MessageEmbed().setDescription(`
 		Houve um erro na busca, tente novamente mais tarde.\nCaso o erro persista entre em contato com o desenvolvedor:\n\nDiscord: [${admin.tag}](https://discordapp.com/users/${admin.id})\nTwitter: [@johncovv](https://twitter.com/johncovv)`);

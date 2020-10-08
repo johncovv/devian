@@ -7,7 +7,7 @@ export default {
 		description: 'Set prefix from Devian bot!',
 		permissions: ['ADMINISTRATOR'],
 	},
-	run: async (client, message, args): Promise<void> => {
+	run: async (client, message, args, prefix): Promise<void> => {
 		const arg = args?.join().trim();
 
 		const guildsCollection = client.guildsCollection as GuildType[];
@@ -24,7 +24,7 @@ export default {
 
 		if (arg?.length === 0) {
 			embed.setDescription(
-				`**No prefix assigned!**\n\nExample of use: **${existGuild?.config.prefix}devian-set-prefix D!**`,
+				`**No prefix assigned!**\n\nExample of use: **${prefix}devian-set-prefix D!**`,
 			);
 		} else if (arg) {
 			const { _id, guildId, name, icon, config } = existGuild;

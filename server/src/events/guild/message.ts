@@ -45,5 +45,5 @@ export default (client: ClientType, message: Message): void => {
 	}
 
 	// if the command is found, execute the command
-	if (commandFile) commandFile.info.command.run(client, message, args);
+	if (commandFile) commandFile.info.command.run(client, message, args, prefix);
 };
