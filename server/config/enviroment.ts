@@ -4,8 +4,9 @@ dotenv.config();
 
 export default {
 	isDev: !!(!process.env.NODE_ENV || process.env.NODE_ENV === 'development'),
+	port: process.env.PORT || '3000',
 	token: process.env.DISCORD_TOKEN,
-	prefix: process.env.DISCORD_PREFIX || '.',
+	prefix: process.env.DISCORD_PREFIX || 'd!',
 	mongoUrl: process.env.MONGO_URL || '',
 	animeBaseUrl: process.env.ANIME_BASE_URL || '',
 	youtubeKey: process.env.YOUTUBE_KEY || '',

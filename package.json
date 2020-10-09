@@ -19,8 +19,10 @@
 		"@discordjs/opus": "^0.3.2",
 		"axios": "^0.20.0",
 		"colors": "^1.4.0",
+		"cors": "^2.8.5",
 		"discord.js": "^12.3.1",
 		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
 		"mongoose": "^5.10.7",
 		"node-fetch": "^2.6.1",
 		"popyt": "^4.1.2",
@@ -28,6 +30,8 @@
 		"ytdl-core": "^3.3.0"
 	},
 	"devDependencies": {
+		"@types/cors": "^2.8.7",
+		"@types/express": "^4.17.8",
 		"@types/mongoose": "^5.7.36",
 		"@types/node": "^14.11.2",
 		"@types/node-fetch": "^2.5.7",

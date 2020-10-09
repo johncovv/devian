@@ -33,7 +33,9 @@ export default (client: ClientType): void => {
 		}
 	});
 
-	console.log(colors.bgGreen.black(`\nLogged in as ${client.user?.tag}!\n`));
+	console.log(
+		colors.bgGreen.black(`\n🤖 Client started as ${client.user?.tag}!\n`),
+	);
 
 	const allCommands = client.commands as CollectionType[];
 

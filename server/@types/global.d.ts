@@ -16,6 +16,7 @@ declare global {
 			MONGO_URL: string;
 			ANIME_BASE_URL: string;
 			YOUTUBE_KEY: string;
+			PORT: string;
 		}
 	}
 

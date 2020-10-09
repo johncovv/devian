@@ -18,7 +18,8 @@ const youtubeSearch = new YouTube(youtubeKey, '', { cache: false });
 export default {
 	config: {
 		tag: 'play',
-		description: '',
+		description:
+			'Plays a youtube video on a voice channel.\nPossible to pass a URL of the video or playlist or even search for a video by passing the title.',
 		permissions: ['SEND_MESSAGES', 'CONNECT'],
 	},
 	run: async (client, message, args): Promise<void> => {

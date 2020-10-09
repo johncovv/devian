@@ -1,12 +1,17 @@
 import { Client, Collection } from 'discord.js';
+import express from 'express';
+import cors from 'cors';
 
 import requireDir from 'require-dir';
+import colors from 'colors';
 import path from 'path';
 
 import commandsHandler from './src/handlers/commands';
 import eventsHandler from './src/handlers/events';
 
 import './config/database';
+
+import routes from './src/routes';
 
 // config
 import env from './config/enviroment';
@@ -24,3 +29,27 @@ commandsHandler(client);
 
 const { token } = env;
 client.login(token);
+
+const app = express();
+
+app.use(express.json());
+
+app.use(cors());
+
+app.use('/api', (req, res, next) => {
+	req.clientData = {
+		guilds: client.guildsCollection.array(),
+		commands: client.commands.array(),
+	};
+
+	next();
+});
+
+app.use('/api/client', routes);
+
+const { port } = env;
+
+app.listen(port, () =>
+	// eslint-disable-next-line no-console
+	console.log(colors.bgGreen.black(`\n🚀 Server started on port: ${port}`)),
+);
