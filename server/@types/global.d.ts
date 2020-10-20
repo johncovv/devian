@@ -10,13 +10,7 @@ import {
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
-			DISCORD_TOKEN: string;
-			NODE_ENV: string;
-			DISCORD_PREFIX: string;
-			MONGO_URL: string;
-			ANIME_BASE_URL: string;
-			YOUTUBE_KEY: string;
-			PORT: string;
+			[key: string]: string | undefined;
 		}
 	}
 
