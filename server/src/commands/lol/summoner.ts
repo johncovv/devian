@@ -87,7 +87,7 @@ export default {
 				// eslint-disable-next-line no-console
 				console.error(err);
 
-				message.channel.send(InternalErrorMessage(client));
+				message.channel.send(await InternalErrorMessage(client));
 			}
 		}
 	},

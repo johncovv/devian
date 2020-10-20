@@ -10,19 +10,12 @@ declare namespace LeagueOfLegends {
 	}
 
 	export interface RiotApi {
-		REGIONS: [
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-			{ full: string; short: string; server: string },
-		];
+		REGIONS: {
+			full: string;
+			short: string;
+			server: string;
+			language: string;
+		}[];
 	}
 
 	export interface MasteryChampion {

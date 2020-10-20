@@ -71,7 +71,11 @@ export default async (
 	// player + server
 	context.font = '10px "lol"';
 	context.fillStyle = '#545450';
-	context.fillText(`${name.toUpperCase().replace(/\s+/g, '')} #BR1`, 168, 138);
+	context.fillText(
+		`${name.toUpperCase().replace(/\s+/g, '')} #${region.toUpperCase()}`,
+		168,
+		138,
+	);
 
 	// GET RANKED INFOS BY PLAYER ID
 	const ranked = await riot.League.Entries.by.summonerID(id);
