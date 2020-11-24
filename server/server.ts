@@ -11,7 +11,8 @@ import eventsHandler from './src/handlers/events';
 
 import './config/database';
 
-import routes from './src/routes';
+import clientRoutes from './src/routes/client';
+import userRoutes from './src/routes/user';
 
 // config
 import env from './config/enviroment';
@@ -45,7 +46,9 @@ app.use('/api', (req, res, next) => {
 	next();
 });
 
-app.use('/api/client', routes);
+app.use('/api/client', clientRoutes);
+
+app.use('/api', userRoutes);
 
 const { port } = env;
 
