@@ -78,6 +78,8 @@ export default async (
 	);
 
 	// GET RANKED INFOS BY PLAYER ID
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore: wrong kayn typing for the next line
 	const ranked = await riot.League.Entries.by.summonerID(id);
 
 	if (ranked.length > 0) {
