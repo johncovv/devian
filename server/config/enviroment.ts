@@ -8,8 +8,12 @@ export default {
 	token: process.env.DISCORD_TOKEN || '',
 	discord_id: process.env.DISCORD_ID || '',
 	prefix: process.env.DISCORD_PREFIX || 'd!',
-	mongoUrl: process.env.MONGO_URL || '',
 	animeBaseUrl: process.env.ANIME_BASE_URL || '',
 	youtubeKey: process.env.YOUTUBE_KEY || '',
 	riotToken: process.env.RIOT_TOKEN || '',
+
+	// database
+	databaseUser: process.env.DATABASE_USER || '',
+	databasePassword: process.env.DATABASE_PASSWORD || '',
+	databaseName: process.env.DATABASE_NAME || '',
 };

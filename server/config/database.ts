@@ -4,7 +4,11 @@ import path from 'path';
 
 import env from './enviroment';
 
-const connection = mongoose.connect(env.mongoUrl, {
+const { databaseUser, databasePassword, databaseName } = env;
+
+const MongoUrl = `mongodb+srv://${databaseUser}:${databasePassword}@main-cluster.vvp86.mongodb.net/${databaseName}?retryWrites=true&w=majority`;
+
+const connection = mongoose.connect(MongoUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
