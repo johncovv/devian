@@ -7,11 +7,11 @@ export default (client: ClientType): void => {
 		messageEvent(client, msg);
 	});
 
-	client.on('guildCreate', async (guild) => {
+	client.on('guildCreate', (guild) => {
 		guildCreatedEvent(client, guild);
 	});
 
-	client.on('ready', async () => {
+	client.on('ready', () => {
 		readyEvent(client);
 	});
 };
