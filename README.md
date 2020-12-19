@@ -23,8 +23,8 @@ It was created to test and improve my knowledge in NodeJS.
 - [stop](https://github.com/johncovv/devian/tree/develop/server/src/commands/music/stop.ts)
 - [volume](https://github.com/johncovv/devian/tree/develop/server/src/commands/music/volume.ts)
 - [nowPlaying](https://github.com/johncovv/devian/tree/develop/server/src/commands/music/nowPlaying.ts)
-#### Entertainment
-- [anime](https://github.com/johncovv/devian/tree/develop/server/src/commands/entertainment/anime.ts)
+<!-- #### Entertainment
+- [anime](https://github.com/johncovv/devian/tree/develop/server/src/commands/entertainment/anime.ts) -->
 #### League of Legends
 - [champion](https://github.com/johncovv/devian/tree/develop/server/src/commands/lol/champion.ts)
 - [summoner](https://github.com/johncovv/devian/tree/develop/server/src/commands/lol/summoner.ts)

@@ -12,10 +12,10 @@ export default (client: ClientType, message: Message): void => {
 	const guildsArray = client.guildsCollection as GuildType[];
 	const exist = guildsArray.find(
 		(x) => x.guildId === parseInt(guild.id, 10),
-	) as GuildType;
+	) as GuildType | null;
 
 	// set the prefix
-	const prefix = exist.config.prefix || env.prefix;
+	const prefix = exist?.config.prefix || env.prefix;
 
 	// checks if the message starts with the prefix
 	if (!message.content.startsWith(prefix)) return;

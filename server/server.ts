@@ -2,22 +2,18 @@ import { Client, Collection } from 'discord.js';
 import express from 'express';
 import cors from 'cors';
 
-import requireDir from 'require-dir';
 import colors from 'colors';
-import path from 'path';
+
+import './config/database';
 
 import commandsHandler from './src/handlers/commands';
 import eventsHandler from './src/handlers/events';
-
-import './config/database';
 
 import clientRoutes from './src/routes/client';
 import userRoutes from './src/routes/user';
 
 // config
 import env from './config/enviroment';
-
-requireDir(path.join(__dirname, 'src', 'models'));
 
 // client
 const client = new Client({ disableMentions: 'all' }) as ClientType;

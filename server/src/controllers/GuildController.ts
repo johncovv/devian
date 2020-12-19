@@ -1,13 +1,14 @@
 /* eslint-disable no-console */
 import { Guild } from 'discord.js';
 import mongoose from 'mongoose';
+import { GuildInstanceType } from '../models/Guild';
 
 mongoose.set('useFindAndModify', false);
 
-const GuildModel = mongoose.model('Guild');
+const GuildModel = mongoose.model('Guild') as mongoose.Model<GuildInstanceType>;
 
 export default {
-	async find(id: string | number): Promise<mongoose.Document | undefined> {
+	async find(id: string): Promise<mongoose.Document | undefined> {
 		try {
 			const response = await GuildModel.findOne({ guildId: id });
 

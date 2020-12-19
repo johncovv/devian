@@ -18,8 +18,8 @@ export default async (client: ClientType): Promise<void> => {
 		'info',
 		'moderation',
 		'administration',
-		'entertainment',
 		'music',
 		'lol',
+		// 'entertainment',
 	].forEach((x) => load(x));
 };

@@ -4,15 +4,16 @@
 	"description": "Discord bot helper for developers",
 	"main": "index.js",
 	"engines": {
-		"node": "^12.0.0"
+		"node": "^12.16.1"
 	},
 	"repository": "https://github.com/johncovv/devian-bot",
 	"author": "John Covv <contato@johncovv.com>",
 	"license": "MIT",
 	"private": false,
-	"type": "module",
+	"type": "commonjs",
 	"scripts": {
-		"build": "tsc",
+		"copy-files": "cp -rv server/src/assets/ dist/src/",
+		"build": "tsc && yarn copy-files",
 		"start": "node dist/server.js",
 		"dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules server/server.ts",
 		"lint": "eslint . --ext .ts",
@@ -28,16 +29,16 @@
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"kayn": "^0.10.2",
-		"mongoose": "^5.10.7",
+		"mongoose": "^5.11.8",
 		"node-fetch": "^2.6.1",
 		"popyt": "^4.1.2",
 		"require-dir": "^1.2.0",
-		"ytdl-core": "^3.3.0"
+		"ytdl-core": "^4.2.1"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.7",
 		"@types/express": "^4.17.8",
-		"@types/mongoose": "^5.7.36",
+		"@types/mongoose": "^5.10.3",
 		"@types/node": "^14.11.2",
 		"@types/node-fetch": "^2.5.7",
 		"@types/require-dir": "^1.0.1",

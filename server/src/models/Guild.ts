@@ -1,6 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 const { Schema } = mongoose;
+
+export interface GuildInstanceType extends Document {
+	guildId: string;
+	name: string;
+	icon: string;
+	config?: {
+		prefix?: string;
+		language?: string;
+	};
+}
 
 const ConfigSchema = new Schema({
 	prefix: {
@@ -15,7 +25,7 @@ const ConfigSchema = new Schema({
 
 const GuildSchema = new Schema({
 	guildId: {
-		type: Number,
+		type: String,
 		required: true,
 	},
 	name: {
@@ -29,7 +39,8 @@ const GuildSchema = new Schema({
 	config: {
 		type: ConfigSchema,
 		default: () => ({}),
+		required: false,
 	},
 });
 
-mongoose.model('Guild', GuildSchema);
+mongoose.model<GuildInstanceType>('Guild', GuildSchema);
