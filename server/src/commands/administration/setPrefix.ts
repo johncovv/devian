@@ -17,7 +17,7 @@ export default {
 		const { guild } = message;
 
 		const existGuild = guildsCollection.find(
-			(x) => x.guildId === parseInt(guild.id, 10),
+			(x) => x.guildId === guild.id,
 		) as GuildType;
 
 		const embed = new MessageEmbed();

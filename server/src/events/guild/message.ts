@@ -11,7 +11,7 @@ export default (client: ClientType, message: Message): void => {
 	// fetch the settings of the server that the command was executed
 	const guildsArray = client.guildsCollection as GuildType[];
 	const exist = guildsArray.find(
-		(x) => x.guildId === parseInt(guild.id, 10),
+		(x) => x.guildId === guild.id,
 	) as GuildType | null;
 
 	// set the prefix
