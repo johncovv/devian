@@ -20,6 +20,7 @@ const client = new Client({ disableMentions: 'all' }) as ClientType;
 
 client.commands = new Collection();
 client.guildsCollection = new Collection();
+client.admins = new Collection();
 
 eventsHandler(client);
 commandsHandler(client);

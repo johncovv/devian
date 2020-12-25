@@ -1,8 +1,16 @@
-import { Message, BitFieldResolvable, PermissionString } from 'discord.js';
+import {
+	Message,
+	BitFieldResolvable,
+	PermissionString,
+	ClientUser,
+} from 'discord.js';
 
 import env from '../../../config/enviroment';
 
-export default (client: ClientType, message: Message): void => {
+export default (
+	client: ClientType,
+	message: Message,
+): Promise<Message> | void => {
 	if (message.author.bot) return;
 	if (!message.guild) return;
 
@@ -29,6 +37,21 @@ export default (client: ClientType, message: Message): void => {
 	const commandFile = client.commands.get(command);
 
 	if (!commandFile) return;
+
+	const isRoot = !!(commandFile.info.dir === 'root');
+
+	if (isRoot) {
+		const adminsCollection = client.admins.array() as ClientUser[];
+
+		const isAdmin = adminsCollection.find(
+			(user) => user.id === message.member?.id,
+		);
+
+		if (!isAdmin) {
+			message.delete();
+			return;
+		}
+	}
 
 	// checks if the user has the permissions required by the command
 	const permissions = commandFile.info.command.config

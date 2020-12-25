@@ -5,6 +5,7 @@ import {
 	Message,
 	PermissionString,
 	BitFieldResolvable,
+	ClientUser,
 } from 'discord.js';
 
 declare global {
@@ -53,6 +54,7 @@ declare global {
 	interface ClientType extends Client {
 		commands: Collection<CollectionType>;
 		guildsCollection: Collection<GuildsCollection>;
+		admins: Collection<{ key: string; user: ClientUser }>;
 	}
 }
 

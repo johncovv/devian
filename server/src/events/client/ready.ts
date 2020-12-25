@@ -44,4 +44,11 @@ export default (client: ClientType): void => {
 			`Command ${colors.green(command.info.command.config.tag)} registered ✅`,
 		);
 	});
+
+	// store admins on client collection
+	['426609168217276417'].forEach((adminId) => {
+		client.users.fetch(adminId).then((admin) => {
+			client.admins.set(admin.id, admin);
+		});
+	});
 };
