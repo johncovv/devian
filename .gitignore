@@ -1,0 +1,10 @@
+# folders
+node_modules/
+out/
+
+# files
+.env**
+
+# keep only the folder
+.vscode/*
+!.vscode/launch.json
