@@ -1,7 +1,7 @@
-import express, { Application } from 'express';
+import { Application, Router as expressRouter } from 'express';
 import cors, { CorsOptions } from 'cors';
 
-const apiRouter = express.Router();
+const apiRouter = expressRouter();
 
 const corsOpt: CorsOptions = {
 	origin: false,

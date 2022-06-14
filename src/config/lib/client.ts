@@ -1,5 +1,6 @@
 import { Client, Intents, Collection } from 'discord.js';
 
+import { registerCommands } from '@client/handlers/commands';
 import { eventsHandler } from '@client/handlers/events';
 import env from '@config/env';
 
@@ -24,6 +25,9 @@ class DiscordClient {
 	public starts(): Client {
 		this.client.login(env.client.token);
 
+		this.client.commands = new Collection();
+
+		registerCommands(this.client);
 		eventsHandler(this.client);
 
 		return this.client;
