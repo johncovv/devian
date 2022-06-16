@@ -11,7 +11,8 @@
 		"build": "tsc -p tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./out && copyfiles assets/* out/",
 		"dev": "set \"NODE_ENV=development\" && tsnd --transpile-only --respawn --inspect --ignore-watch node_modules -r tsconfig-paths/register src/server.ts",
 		"lint:fix": "eslint . --ext .ts --config .eslintrc.json --fix",
-		"lint": "eslint . --ext .ts --config .eslintrc.json"
+		"lint": "eslint . --ext .ts --config .eslintrc.json",
+		"commit": "git-cz"
 	},
 	"repository": {
 		"type": "git",
@@ -27,15 +28,23 @@
 		"email": "contato@johncovv.com",
 		"url": "https://johncovv.com"
 	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
 	"license": "ISC",
 	"private": true,
 	"devDependencies": {
+		"@commitlint/cli": "^17.0.2",
+		"@commitlint/config-conventional": "^17.0.2",
 		"@types/cors": "^2.8.12",
 		"@types/dotenv": "^8.2.0",
 		"@types/express": "^4.17.13",
 		"@types/mongoose": "^5.11.97",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
+		"commitizen": "^4.2.4",
 		"copyfiles": "^2.4.1",
 		"eslint": "^8.16.0",
 		"eslint-config-google": "^0.14.0",
