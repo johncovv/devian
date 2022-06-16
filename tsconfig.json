@@ -11,8 +11,10 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"paths": {
+			"@modules/*": ["modules/*"],
 			"@config/*": ["config/*"],
-			"@client/*": ["client/*"]
+			"@client/*": ["client/*"],
+			"@enums/*": ["enums/*"]
 		},
 		"sourceMap": false,
 		"skipLibCheck": true,

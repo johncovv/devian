@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { initRoutes } from './routes';
+import { initMongoose } from './mongoose';
 import { initMiddlewares } from './middlewares';
 
 /**
@@ -15,6 +16,7 @@ class Express {
 	constructor() {
 		this.app = express();
 
+		initMongoose();
 		initMiddlewares(this.app);
 		initRoutes(this.app);
 	}
