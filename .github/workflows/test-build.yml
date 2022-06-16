@@ -11,7 +11,7 @@ on:
         description: 'Log legal'
 
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
 
 jobs:
   build:
