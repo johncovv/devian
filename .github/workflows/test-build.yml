@@ -9,7 +9,7 @@ on:
       logLeval:
         required: true
         description: 'Log legal'
-  
+
   pull_request:
     branches: [ "develop" ]
 
