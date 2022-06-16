@@ -4,6 +4,12 @@
 name: Node.js CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      logLeval:
+        required: true
+        description: 'Log legal'
+  
   pull_request:
     branches: [ "develop" ]
 
